@@ -32,38 +32,49 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_gravity="center"
             android:layout_width="330dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:background="@drawable/shadow_02556">
         </ImageView>
 
         <ImageView
-            android:layout_gravity="center"
             android:layout_width="360dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/shadow_02610"/>
 
-        <!--<RelativeLayout-->
+        <FrameLayout
+            android:layout_width="390dp"
+            android:layout_height="match_parent"
+            android:id="@+id/menuLayout"
+            android:layout_gravity="center"
+            android:background="#ffffff"
+            android:layout_marginTop="30dp">
 
-            <!--android:layout_width="390dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_gravity="center_vertical|center_horizontal"-->
-            <!--android:background="@drawable/shadow_05137">-->
+            <ImageView
+                android:layout_width="360dp"
+                android:layout_height="261dp"
+                android:id="@+id/topImage"
+                android:onClick="topImageClick"
+                android:layout_gravity="top|center"
+                android:background="@drawable/chicken"/>
 
+            <ImageView
+                android:layout_width="360dp"
+                android:layout_height="261dp"
+                android:id="@+id/downImage"
+                android:onClick="downImageClick"
+                android:layout_gravity="bottom|center"
+                android:background="@drawable/zazang" />
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="360dp"-->
-                <!--android:layout_height="200dp"-->
-                <!--android:background="@drawable/chicken" />-->
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/vs" />
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="360dp"-->
-                <!--android:layout_height="200dp"-->
-                <!--android:background="@drawable/zzazang" />-->
-
-        <!--</RelativeLayout>-->
-
+        </FrameLayout>
     </FrameLayout>
 </LinearLayout>
