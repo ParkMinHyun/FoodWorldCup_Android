@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.parkminhyun.myapplication.MenuWorldCupActivity">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal">
 
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/close_btn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="X" />
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Menu World Cup"
+            android:textSize="20dp" />
+    </LinearLayout>
+    <!--#088dad-->
+    <!--#54b0c0-->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="330dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shadow_02556">
+        </ImageView>
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="360dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shadow_02610"/>
+
+        <!--<RelativeLayout-->
+
+            <!--android:layout_width="390dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center_vertical|center_horizontal"-->
+            <!--android:background="@drawable/shadow_05137">-->
+
+
+            <!--<RelativeLayout-->
+                <!--android:layout_width="360dp"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:background="@drawable/chicken" />-->
+
+            <!--<RelativeLayout-->
+                <!--android:layout_width="360dp"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:background="@drawable/zzazang" />-->
+
+        <!--</RelativeLayout>-->
+
+    </FrameLayout>
+</LinearLayout>
