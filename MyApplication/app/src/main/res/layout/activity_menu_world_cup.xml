@@ -28,6 +28,7 @@
     <!--#54b0c0-->
 
     <FrameLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -46,7 +47,7 @@
             android:background="@drawable/shadow_02610"/>
 
         <FrameLayout
-            android:layout_width="390dp"
+            android:layout_width="360dp"
             android:layout_height="match_parent"
             android:id="@+id/menuLayout"
             android:layout_gravity="center"
