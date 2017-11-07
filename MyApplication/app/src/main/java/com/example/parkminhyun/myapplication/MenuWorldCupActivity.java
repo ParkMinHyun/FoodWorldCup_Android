@@ -4,13 +4,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class MenuWorldCupActivity extends AppCompatActivity {
 
     View view;
-    FrameLayout roots, menuLayout, foodMenuLayout, menuFrameLayout;
+    FrameLayout roots, menuLayout;
     ImageView topImage, downImage;
 
     @Override
@@ -60,16 +62,17 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         @Override
         public void run() {
             roots.addView(view);
-            topImage.setAlpha(0.99f);
-            downImage.setAlpha(0.99f);
+            Animation fade_in_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+            view.startAnimation(fade_in_animation);
+
+            topImage.setAlpha(1f);
+            downImage.setAlpha(1f);
         }
     };
 
     public void findViewInit() {
         roots = (FrameLayout) findViewById(R.id.root);
-        menuFrameLayout = (FrameLayout) findViewById(R.id.frameLayout_menu);
         menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
-        foodMenuLayout = (FrameLayout) findViewById(R.id.foodMenuLayout);
         topImage = (ImageView) findViewById(R.id.topImage);
         downImage = (ImageView) findViewById(R.id.downImage);
     }
