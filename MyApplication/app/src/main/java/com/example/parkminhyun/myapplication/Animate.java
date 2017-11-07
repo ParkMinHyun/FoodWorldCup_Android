@@ -6,8 +6,6 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 
-import static com.example.parkminhyun.myapplication.MenuWorldCupActivity.menuLayout;
-
 public class Animate extends Animation implements Animation.AnimationListener {
     public int height, width;
 
@@ -48,7 +46,6 @@ public class Animate extends Animation implements Animation.AnimationListener {
     @Override
     public void onAnimationEnd(Animation animation) {
 
-        menuLayout.removeView(menuLayout);
     }
 
     @Override
