@@ -1,5 +1,6 @@
 package com.example.parkminhyun.myapplication;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,10 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 
 public class MenuWorldCupActivity extends AppCompatActivity {
 
@@ -28,7 +33,7 @@ public class MenuWorldCupActivity extends AppCompatActivity {
 
     private Animation translateUpAnim;
     private LinearLayout resultPage;
-
+    private KonfettiView konfettiView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +45,12 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         propertyInit();
         menuListInit();
         foodImageViewSetting();
+
+        konfettiView = (KonfettiView)findViewById(R.id.konfettiView);
+
     }
 
+    // id 추가 및 기타 속성 초기화
     public void propertyInit() {
         roots = (FrameLayout) findViewById(R.id.root);
         menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
@@ -51,7 +60,6 @@ public class MenuWorldCupActivity extends AppCompatActivity {
 
         topImageCheck = (ImageView) findViewById(R.id.topImageCheck);
         downImageCheck = (ImageView) findViewById(R.id.downImageCheck);
-
 
         // 애니메이션객체로딩
         translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.translate_up);
@@ -64,11 +72,16 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     // 애니메이션 리스너 정의
     private class SlidingPageAnimationListener implements Animation.AnimationListener {
         @Override
-        public void onAnimationRepeat(Animation animation) {}
+        public void onAnimationRepeat(Animation animation) {
+        }
+
         @Override
-        public void onAnimationStart(Animation animation) {}
+        public void onAnimationStart(Animation animation) {
+        }
+
         // 애니메이션이 끝날때 호출되는 메소드
-        public void onAnimationEnd(Animation animation) {}
+        public void onAnimationEnd(Animation animation) {
+        }
     }
 
     public void foodImageViewSetting() {
@@ -122,8 +135,8 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     private void FoodImageClick_Result(String mode) {
 
         // Click Event 비활성화
-        downImage.setClickable(false);
         topImage.setClickable(false);
+        downImage.setClickable(false);
 
         // 투명도 설정 + String 배열 삭제
         if (mode.equals("topImageClick")) {
@@ -173,6 +186,10 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             if (final_flag) {
                 resultPage.setVisibility(view.VISIBLE);
                 resultPage.startAnimation(translateUpAnim);
+
+                // 0.1초 뒤 Handler 실행
+                Handler Handler = new Handler();
+                Handler.postDelayed(mMyRunnable4, 1000);
             }
 
             // 결승전 아닐 경우 Handler2 실행
@@ -212,6 +229,25 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             // topImage, downImage 다시 클릭 이벤트 활성화
             downImage.setClickable(true);
             topImage.setClickable(true);
+        }
+    };
+
+
+    // view 삭제 실행
+    private Runnable mMyRunnable4 = new Runnable() {
+        @Override
+        public void run() {
+
+            konfettiView.build()
+                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                    .setDirection(0.0, 359.0)
+                    .setSpeed(1f, 5f)
+                    .setFadeOutEnabled(true)
+                    .setTimeToLive(2000L)
+                    .addShapes(Shape.RECT, Shape.CIRCLE)
+                    .addSizes(new Size(16, 6f))
+                    .setPosition(konfettiView.getX() + konfettiView.getWidth()/2, konfettiView.getY()+konfettiView.getHeight()/3)
+                    .burst(500);
         }
     };
 }
