@@ -69,8 +69,6 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         downImage.setImageResource(resID2);
 
         // 이미지 클릭 활성화 및 투명도 초기화
-        topImage.setClickable(true);
-        downImage.setClickable(true);
         topImage.setAlpha(1f);
         downImage.setAlpha(1f);
     }
@@ -94,10 +92,28 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         foodTournerment_menuList.add("zazang");
     }
 
+    // Food 토너먼트 중 음식 이미지를 클릭했을 경우
+    private void FoodImageClick_Result(String mode){
+
+        // Click Event 비활성화
+        downImage.setClickable(false);
+        topImage.setClickable(false);
+
+        // 투명도 설정 + String 배열 삭제
+        if(mode.equals("topImageClick"))
+        {
+            downImage.setAlpha(0.3f);
+            foodTournerment_menuList.remove((foodIndex--) -1);
+        }
+        else{
+            topImage.setAlpha(0.3f);
+            foodTournerment_menuList.remove((foodIndex--)-2);
+        }
+    }
+
     // 윗 이미지 클릭시
     public void topImageClick(View v) throws InterruptedException {
-        downImage.setAlpha(0.3f);
-        foodTournerment_menuList.remove((foodIndex--) -1);
+        FoodImageClick_Result("topImageClick");
 
         // 1초 뒤 Handler 실행
         Handler myHandler = new Handler();
@@ -106,9 +122,7 @@ public class MenuWorldCupActivity extends AppCompatActivity {
 
     // 아래 이미지 클릭시
     public void downImageClick(View v) {
-
-        topImage.setAlpha(0.3f);
-        foodTournerment_menuList.remove((foodIndex--)-2);
+        FoodImageClick_Result("topImageClick");
 
         // 1초 뒤 Handler 실행
         Handler myHandler = new Handler();
@@ -164,6 +178,8 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             Animation fade_in_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
             view.startAnimation(fade_in_animation);
 
+            downImage.setClickable(true);
+            topImage.setClickable(true);
 
         }
     };
