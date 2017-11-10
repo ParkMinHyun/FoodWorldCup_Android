@@ -20,7 +20,10 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     ImageView topImageCheck, downImageCheck;
     ImageView topImage, downImage, resultFoodImageView;
 
-    public static List<Integer> foodTournerment_menuDrawableList = new ArrayList<Integer>();
+    private List<String> foodTournerment_menuList = new ArrayList<String>();
+    private String mDrawableName1, mDrawableName2;
+    private int resID1, resID2;
+
     private int foodIndex = 0;
     private boolean quarterfinal_flag = false, semifinal_flag = false, final_flag = false;
 
@@ -31,22 +34,16 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_world_cup);
 
-        view = findViewById(R.id.includeFrame);
 
         propertyInit();
         menuListInit();
         foodImageViewSetting();
-
-
-        Intent intent = new Intent(getApplicationContext(),ResultFoodMenuActivity.class);
-        intent.putExtra("resultFood",foodTournerment_menuDrawableList.get(0));
-        startActivity(intent);
-
     }
 
     // id 추가 및 기타 속성 초기화
     public void propertyInit() {
         roots = (FrameLayout) findViewById(R.id.root);
+        view = findViewById(R.id.includeFrame);
         menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
         topImage = (ImageView) findViewById(R.id.topImage);
         downImage = (ImageView) findViewById(R.id.downImage);
@@ -92,31 +89,37 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             final_flag = true;
         }
 
-        // Image Settings
-        topImage.setImageResource(foodTournerment_menuDrawableList.get(foodIndex++));
-        downImage.setImageResource(foodTournerment_menuDrawableList.get(foodIndex++));
+        // 문자열로 drawable에 있는 음식 이미지 가져오기
+        mDrawableName1 = foodTournerment_menuList.get(foodIndex++).toString();
+        resID1 = getResources().getIdentifier(mDrawableName1, "drawable", getPackageName());
+        topImage.setImageResource(resID1);
+
+        mDrawableName2 = foodTournerment_menuList.get(foodIndex++).toString();
+        resID2 = getResources().getIdentifier(mDrawableName2, "drawable", getPackageName());
+        downImage.setImageResource(resID2);
+
         // 이미지 클릭 활성화 및 투명도 초기화
         topImage.setAlpha(1f);
         downImage.setAlpha(1f);
     }
 
     public void menuListInit() {
-        foodTournerment_menuDrawableList.add(R.drawable.baekban);
-        foodTournerment_menuDrawableList.add(R.drawable.bibimbab);
-        foodTournerment_menuDrawableList.add(R.drawable.bread);
-        foodTournerment_menuDrawableList.add(R.drawable.cake);
-        foodTournerment_menuDrawableList.add(R.drawable.chicken);
-        foodTournerment_menuDrawableList.add(R.drawable.dduckppoki);
-        foodTournerment_menuDrawableList.add(R.drawable.donggas);
-        foodTournerment_menuDrawableList.add(R.drawable.doughnut);
-        foodTournerment_menuDrawableList.add(R.drawable.gimbab);
-        foodTournerment_menuDrawableList.add(R.drawable.hamburger);
-        foodTournerment_menuDrawableList.add(R.drawable.ramen);
-        foodTournerment_menuDrawableList.add(R.drawable.sandwich);
-        foodTournerment_menuDrawableList.add(R.drawable.spagetti);
-        foodTournerment_menuDrawableList.add(R.drawable.steak);
-        foodTournerment_menuDrawableList.add(R.drawable.sushi);
-        foodTournerment_menuDrawableList.add(R.drawable.zazang);
+        foodTournerment_menuList.add("baekban");
+        foodTournerment_menuList.add("bibimbab");
+        foodTournerment_menuList.add("bread");
+        foodTournerment_menuList.add("cake");
+        foodTournerment_menuList.add("chicken");
+        foodTournerment_menuList.add("dduckppoki");
+        foodTournerment_menuList.add("donggas");
+        foodTournerment_menuList.add("doughnut");
+        foodTournerment_menuList.add("gimbab");
+        foodTournerment_menuList.add("hamburger");
+        foodTournerment_menuList.add("ramen");
+        foodTournerment_menuList.add("sandwich");
+        foodTournerment_menuList.add("spagetti");
+        foodTournerment_menuList.add("steak");
+        foodTournerment_menuList.add("sushi");
+        foodTournerment_menuList.add("zazang");
 
     }
 
@@ -132,12 +135,13 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             downImage.setAlpha(0.3f);
             topImageCheck.bringToFront();
             topImageCheck.setVisibility(view.VISIBLE);
-            foodTournerment_menuDrawableList.remove((foodIndex--) - 1);
+            foodTournerment_menuList.remove((foodIndex--) - 1);
+
         } else {
             topImage.setAlpha(0.3f);
             downImageCheck.bringToFront();
             downImageCheck.setVisibility(view.VISIBLE);
-            foodTournerment_menuDrawableList.remove((foodIndex--) - 2);
+            foodTournerment_menuList.remove((foodIndex--) - 2);
         }
     }
 
@@ -171,18 +175,10 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             topImageCheck.setVisibility(view.INVISIBLE);
             downImageCheck.setVisibility(view.INVISIBLE);
 
-            // 결승전 진행할 때 결과창 Activity 띄우기
-            if (final_flag) {
-
-
-            }
-
-            // 결승전 아닐 경우 Handler2 실행
-            else {
                 // 0.1초 뒤 Handler 실행
                 Handler Handler = new Handler();
                 Handler.postDelayed(mMyRunnable2, 100);
-            }
+
         }
     };
 
@@ -192,9 +188,19 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         public void run() {
             roots.removeView(view);
 
-            // 0.1초 뒤 Handler 실행
-            Handler Handler = new Handler();
-            Handler.postDelayed(mMyRunnable3, 100);
+            // 결승전 진행할 때 결과창 Activity 띄우기
+            if (final_flag) {
+
+                Intent intent = new Intent(getApplicationContext(),ResultFoodMenuActivity.class);
+                intent.putExtra("resultFood",foodTournerment_menuList.get(0));
+                startActivity(intent);
+
+            }
+            else {
+                // 0.1초 뒤 Handler 실행
+                Handler Handler = new Handler();
+                Handler.postDelayed(mMyRunnable3, 100);
+            }
         }
     };
 
