@@ -9,10 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.nhn.android.maps.NMapController;
+
 public class FragmentMapActivity extends FragmentActivity {
     Button deleteBtn;
     EditText inputLocation;
+    Fragment1 fragment1;
 
+    // 맵 컨트롤러
+    NMapController mMapController = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +25,6 @@ public class FragmentMapActivity extends FragmentActivity {
 
         propertyInit();
         showNaverMapView();
-
     }
 
     // id 추가 및 기타 속성 초기화
@@ -32,12 +36,15 @@ public class FragmentMapActivity extends FragmentActivity {
     }
 
     public void showNaverMapView(){
-        Fragment1 fragment1 = new Fragment1();
+        fragment1 = new Fragment1();
         fragment1.setArguments(new Bundle());
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragmentHere, fragment1);
         fragmentTransaction.commit();
+
+
+
     }
 
     public void deleteBtnClicked(View v){
