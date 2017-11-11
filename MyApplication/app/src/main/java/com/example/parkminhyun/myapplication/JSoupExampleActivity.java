@@ -52,13 +52,12 @@ public class JSoupExampleActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 Document doc = Jsoup.connect(htmlPageUrl).get();
-                Elements links = doc.select("div.thumb");
+                Elements links = doc.select("a.name");
 
     		for(Element e: links){
-                System.out.println("download: " + e.text());
+                htmlContentInStringFormat += ("download: " + e.text()) + '\n';
             }
 
-                htmlContentInStringFormat += links.get(0).text();
 //
 
 
