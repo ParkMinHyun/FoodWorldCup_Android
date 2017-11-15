@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -23,6 +24,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,6 +40,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,18 +54,25 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     private double longitude;
     private Address currentDong;
 
-    private String infraSearchText = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
     private String searchText;
-    private String encodeStr;
 
-    private String htmlContentInStringFormat;
+    private List<String> foodStoreName;
+    private List<String> foodStoreAddr;
+    private List<Double> foodStoreMapX;
+    private List<Double> foodStoreMapY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_food_map);
 
+        foodStoreName = new ArrayList<>();
+        foodStoreAddr = new ArrayList<>();
+        foodStoreMapX = new ArrayList<>();
+        foodStoreMapY = new ArrayList<>();
+
         gpsInfo = new GPSInfo(this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -73,7 +85,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         gMap = googleMap;
 
         // 현재 위치 이동
-        LatLng currentPos = new LatLng(gpsInfo.getLatitude(),gpsInfo.getLongitude());
+        LatLng currentPos = new LatLng(gpsInfo.getLatitude(), gpsInfo.getLongitude());
         gMap.addMarker(new MarkerOptions().position(currentPos).title("Marker in Sydney"));
         gMap.moveCamera(CameraUpdateFactory.newLatLng(currentPos));
 
@@ -113,20 +125,21 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         @Override
         protected Void doInBackground(Void... params) {
+            Log.i("JSON","시작");
             String clientId = "kEZOwXlvRFPihiPU8fVJ";//애플리케이션 클라이언트 아이디값";
             String clientSecret = "wbyTPTRhuT";//애플리케이션 클라이언트 시크릿값";
             try {
                 String text = URLEncoder.encode(searchText, "UTF-8");
-                String apiURL = "https://openapi.naver.com/v1/search/local.json?query="+ text; // json 결과
+                String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text; // json 결과
                 //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
                 URL url = new URL(apiURL);
-                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.setRequestProperty("X-Naver-Client-Id", clientId);
                 con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
                 int responseCode = con.getResponseCode();
                 BufferedReader br;
-                if(responseCode==200) { // 정상 호출
+                if (responseCode == 200) { // 정상 호출
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 } else {  // 에러 발생
                     br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
@@ -137,7 +150,25 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
                     response.append(inputLine);
                 }
                 br.close();
-                System.out.println(response.toString());
+
+
+                StringBuffer sb = new StringBuffer();
+                try {
+                    JSONObject jsonObject = new JSONObject(response.toString());   // JSONObject 생성
+                    String a = jsonObject.getString("items");
+
+
+                    JSONArray jarray = new JSONArray(a);   // JSONArray 생성
+                    for(int i=0; i < jarray.length(); i++){
+                        JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+
+                        foodStoreName.add(jObject.getString("title"));
+                        foodStoreAddr.add(jObject.getString("address"));
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 System.out.println(e);
             }
