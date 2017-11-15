@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -22,7 +23,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,10 +44,16 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     private GPSInfo gpsInfo;
 
     private GoogleMap gMap;
-    private Geocoder gCorder;
 
     private double latitude;
     private double longitude;
+    private Address currentDong;
+
+    private String infraSearchText = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
+    private String searchText;
+    private String encodeStr;
+
+    private String htmlContentInStringFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,20 +83,71 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         Geocoder gCoder = new Geocoder(getApplicationContext());
         List<Address> addr = null;
         try {
-            addr = gCoder.getFromLocation(latitude, longitude, 1);
+            addr = gCoder.getFromLocation(latitude, longitude, 2);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Address a = addr.get(0);
-        Toast.makeText(getApplicationContext(),
-                a.getSubLocality(),Toast.LENGTH_LONG).show();
-//        a.getAdminArea()+" "+a.getLocality()+" "+a.getThoroughfare();
 
+        // 현재 위치 ex) 신림동 가져오기
+        currentDong = addr.get(1);
+        // 검색 문구 생성
+        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
+
+        // 네이버 검색 API 어싱크로 동작시키기
+        ResultFoodMapActivity.JsoupAsyncTask jsoupAsyncTask = new ResultFoodMapActivity.JsoupAsyncTask();
+        jsoupAsyncTask.execute();
+
+
+//        a.getAdminArea()+" "+a.getLocality()+" "+a.getThoroughfare();
 //
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        gMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        gMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
 
     }
+
+    private class JsoupAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String clientId = "kEZOwXlvRFPihiPU8fVJ";//애플리케이션 클라이언트 아이디값";
+            String clientSecret = "wbyTPTRhuT";//애플리케이션 클라이언트 시크릿값";
+            try {
+                String text = URLEncoder.encode(searchText, "UTF-8");
+                String apiURL = "https://openapi.naver.com/v1/search/local.json?query="+ text; // json 결과
+                //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+                URL url = new URL(apiURL);
+                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("X-Naver-Client-Id", clientId);
+                con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+                int responseCode = con.getResponseCode();
+                BufferedReader br;
+                if(responseCode==200) { // 정상 호출
+                    br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                } else {  // 에러 발생
+                    br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                }
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = br.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                br.close();
+                System.out.println(response.toString());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+        }
+    }
+
 }
