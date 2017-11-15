@@ -151,7 +151,27 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         @Override
         protected void onPostExecute(Void result) {
             Toast.makeText(getApplicationContext(), String.valueOf(convertedGeoPoint.x),Toast.LENGTH_LONG).show();
-            gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.x,convertedGeoPoint.y)).title("새롭게 추가된 놈"));
+
+            double longDouble = convertedGeoPoint.x;
+            double lattDouble = convertedGeoPoint.y;
+
+            LatLng positionOne = new LatLng(lattDouble, longDouble);
+
+            //add marker
+            gMap.addMarker(new MarkerOptions()
+                    .position(positionOne)
+                    .title("힝"));
+
+//
+//            MarkerOptions makerOptions = new MarkerOptions();
+//            makerOptions // LatLng에 대한 어레이를 만들어서 이용할 수도 있다.
+//                    .position(new LatLng(37.52487, 126.92723))
+//                    .title("마커"); // 타이틀.
+//
+//            // 2. 마커 생성 (마커를 나타냄)
+//            gMap.addMarker(makerOptions);
+
+//            gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.x,convertedGeoPoint.y)).title("새롭게 추가된 놈"));
         }
     }
 
