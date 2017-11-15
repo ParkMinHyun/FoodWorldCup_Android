@@ -1,24 +1,14 @@
 package com.example.parkminhyun.myapplication;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,22 +17,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ResultFoodMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -58,8 +41,8 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
     private List<String> foodStoreName;
     private List<String> foodStoreAddr;
-    private List<Double> foodStoreMapX;
-    private List<Double> foodStoreMapY;
+    private List<String> foodStoreMapX;
+    private List<String> foodStoreMapY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +51,8 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         foodStoreName = new ArrayList<>();
         foodStoreAddr = new ArrayList<>();
-        foodStoreMapX = new ArrayList<>();
-        foodStoreMapY = new ArrayList<>();
+        foodStoreMapX = new ArrayList<String>();
+        foodStoreMapY = new ArrayList<String>();
 
         gpsInfo = new GPSInfo(this);
 
@@ -123,6 +106,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
             super.onPreExecute();
         }
 
+        // 네이버 지도 검색 API 이용하는 함수
         @Override
         protected Void doInBackground(Void... params) {
             Log.i("JSON","시작");
@@ -151,24 +135,9 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
                 }
                 br.close();
 
+                // JSON 파싱 변환하기
+                ReceiveFoodInfoUsingJSON(response.toString());
 
-                StringBuffer sb = new StringBuffer();
-                try {
-                    JSONObject jsonObject = new JSONObject(response.toString());   // JSONObject 생성
-                    String a = jsonObject.getString("items");
-
-
-                    JSONArray jarray = new JSONArray(a);   // JSONArray 생성
-                    for(int i=0; i < jarray.length(); i++){
-                        JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
-
-                        foodStoreName.add(jObject.getString("title"));
-                        foodStoreAddr.add(jObject.getString("address"));
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -178,6 +147,26 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         @Override
         protected void onPostExecute(Void result) {
+        }
+    }
+
+    private void ReceiveFoodInfoUsingJSON(String response){
+        StringBuffer sb = new StringBuffer();
+        try {
+            JSONObject jsonObject = new JSONObject(response.toString());   // JSONObject 생성
+            String a = jsonObject.getString("items");
+
+            JSONArray jarray = new JSONArray(a);   // JSONArray 생성
+            for(int i=0; i < jarray.length(); i++){
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+
+                foodStoreName.add(jObject.getString("title"));
+                foodStoreAddr.add(jObject.getString("address"));
+                foodStoreMapX.add(jObject.getString("mapx"));
+                foodStoreMapY.add(jObject.getString("mapy"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
