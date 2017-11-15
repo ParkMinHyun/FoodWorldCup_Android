@@ -53,18 +53,24 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
 
+        // 현재 위치 이동
         LatLng currentPos = new LatLng(gpsInfo.getLatitude(),gpsInfo.getLongitude());
         gMap.addMarker(new MarkerOptions().position(currentPos).title("Marker in Sydney"));
         gMap.moveCamera(CameraUpdateFactory.newLatLng(currentPos));
-//        Geocoder gCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-//        List<Address> addr = null;
-//        try {
-//            addr = gCoder.getFromLocation(latitude, longitude, 1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Address a = addr.get(0);
 
+        latitude = gpsInfo.getLatitude();
+        longitude = gpsInfo.getLongitude();
+
+        Geocoder gCoder = new Geocoder(getApplicationContext());
+        List<Address> addr = null;
+        try {
+            addr = gCoder.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address a = addr.get(0);
+        Toast.makeText(getApplicationContext(),
+                a.getSubLocality(),Toast.LENGTH_LONG).show();
 //        a.getAdminArea()+" "+a.getLocality()+" "+a.getThoroughfare();
 
 //
