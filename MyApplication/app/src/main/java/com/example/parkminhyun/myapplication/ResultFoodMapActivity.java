@@ -1,11 +1,13 @@
 package com.example.parkminhyun.myapplication;
 
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +41,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
     private String searchText;
 
+    GeoPoint convertedGeoPoint;
     private List<String> foodStoreName;
     private List<String> foodStoreAddr;
     private List<String> foodStoreMapX;
@@ -70,7 +73,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         // 현재 위치 이동
         LatLng currentPos = new LatLng(gpsInfo.getLatitude(), gpsInfo.getLongitude());
         gMap.addMarker(new MarkerOptions().position(currentPos).title("Marker in Sydney"));
-        gMap.moveCamera(CameraUpdateFactory.newLatLng(currentPos));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPos,16));
 
         latitude = gpsInfo.getLatitude();
         longitude = gpsInfo.getLongitude();
@@ -147,6 +150,8 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         @Override
         protected void onPostExecute(Void result) {
+            Toast.makeText(getApplicationContext(), String.valueOf(convertedGeoPoint.x),Toast.LENGTH_LONG).show();
+            gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.x,convertedGeoPoint.y)).title("새롭게 추가된 놈"));
         }
     }
 
@@ -165,6 +170,11 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
                 foodStoreMapX.add(jObject.getString("mapx"));
                 foodStoreMapY.add(jObject.getString("mapy"));
             }
+
+            GeoPoint geoPoint = new GeoPoint( Double.parseDouble(foodStoreMapX.get(0)),Double.parseDouble(foodStoreMapY.get(0)));
+            convertedGeoPoint = GeoTrans.convert(1,0,geoPoint);
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
