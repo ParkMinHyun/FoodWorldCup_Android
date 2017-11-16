@@ -1,5 +1,6 @@
 package com.example.parkminhyun.myapplication;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,7 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
     private TextView foodNameTextView;
     private ImageView resultFoodImageView;
     private int resID;
-
+    String resultFoodName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,7 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
         resultFoodImageView = (ImageView) findViewById(R.id.resultFoodImageView);
 
         // 문자열로 drawable에 있는 음식 이미지 가져오기
-        String resultFoodName = getIntent().getExtras().getString("resultFood");
+        resultFoodName = getIntent().getExtras().getString("resultFood");
         resID = getResources().getIdentifier(resultFoodName, "drawable", getPackageName());
         resultFoodImageView.setImageResource(resID);
 
@@ -66,6 +67,9 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
     };
 
     public void findFoodStoreImageClicked(View v){
+        Intent intent = new Intent(getApplicationContext(),ResultFoodMapActivity.class);
+        intent.putExtra("resultFood",resultFoodName);
+        startActivity(intent);
 
     }
 }

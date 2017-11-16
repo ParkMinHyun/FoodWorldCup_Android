@@ -27,11 +27,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ResultFoodMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GPSInfo gpsInfo;
+    private FoodInfomation foodInfomation;
+    public HashMap<String, String> map;
 
     private GoogleMap gMap;
 
@@ -40,6 +43,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     private Address currentDong;
 
     private String searchText;
+    private String resultFoodName;
 
     GeoPoint convertedGeoPoint;
     private List<String> foodStoreName;
@@ -51,6 +55,11 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_food_map);
+
+        foodInfomation = FoodInfomation.getInstance();
+        map = foodInfomation.getMap();
+
+        resultFoodName = getIntent().getExtras().getString("resultFood");
 
         foodStoreName = new ArrayList<>();
         foodStoreAddr = new ArrayList<>();
@@ -86,20 +95,20 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
             e.printStackTrace();
         }
 
+        //***********************************//
+        // 0~1 Index null error 잡기
         // 현재 위치 ex) 신림동 가져오기
-        currentDong = addr.get(1);
+        currentDong = addr.get(0);
+        //***********************************//
         // 검색 문구 생성
-        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
+//        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
+        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + map.get(resultFoodName);
 
         // 네이버 검색 API 어싱크로 동작시키기
         ResultFoodMapActivity.JsoupAsyncTask jsoupAsyncTask = new ResultFoodMapActivity.JsoupAsyncTask();
         jsoupAsyncTask.execute();
 
-
 //        a.getAdminArea()+" "+a.getLocality()+" "+a.getThoroughfare();
-//
-
-
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, Void> {

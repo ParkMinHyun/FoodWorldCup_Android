@@ -52,4 +52,8 @@ public class FoodInfomation {
         map.put("sushi","스시");
         map.put("zazang","짜장면");
     }
+
+    public HashMap<String, String> getMap() {
+        return map;
+    }
 }
