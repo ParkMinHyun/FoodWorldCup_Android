@@ -150,13 +150,20 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         @Override
         protected void onPostExecute(Void result) {
-            // marker 생성 완료
-            gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.y,convertedGeoPoint.x)).title("새롭게 추가된 놈"));
+            // Marker 생성
+            for(int i=0; i<foodStoreName.size(); i++){
+
+                GeoPoint geoPoint = new GeoPoint( Double.parseDouble(foodStoreMapX.get(i)),Double.parseDouble(foodStoreMapY.get(i)));
+                convertedGeoPoint = GeoTrans.convert(1,0,geoPoint);
+
+                // marker 생성 완료
+                gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.y,convertedGeoPoint.x)).title("새롭게 추가된 놈"));
+            }
         }
     }
 
+    // JSON Data 받기
     private void ReceiveFoodInfoUsingJSON(String response){
-        StringBuffer sb = new StringBuffer();
         try {
             JSONObject jsonObject = new JSONObject(response.toString());   // JSONObject 생성
             String a = jsonObject.getString("items");
@@ -170,9 +177,6 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
                 foodStoreMapX.add(jObject.getString("mapx"));
                 foodStoreMapY.add(jObject.getString("mapy"));
             }
-
-            GeoPoint geoPoint = new GeoPoint( Double.parseDouble(foodStoreMapX.get(0)),Double.parseDouble(foodStoreMapY.get(0)));
-            convertedGeoPoint = GeoTrans.convert(1,0,geoPoint);
 
 
         } catch (JSONException e) {
