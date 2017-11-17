@@ -82,7 +82,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         // 현재 위치 이동
         LatLng currentPos = new LatLng(gpsInfo.getLatitude(), gpsInfo.getLongitude());
         gMap.addMarker(new MarkerOptions().position(currentPos).title("Marker in Sydney"));
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPos,17));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPos,15));
 
         latitude = gpsInfo.getLatitude();
         longitude = gpsInfo.getLongitude();
