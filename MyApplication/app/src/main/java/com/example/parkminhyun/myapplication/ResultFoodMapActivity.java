@@ -13,6 +13,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -81,7 +83,9 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         // 현재 위치 이동
         LatLng currentPos = new LatLng(gpsInfo.getLatitude(), gpsInfo.getLongitude());
-        gMap.addMarker(new MarkerOptions().position(currentPos).title("Marker in Sydney"));
+        gMap.addMarker(new MarkerOptions().position(currentPos)
+                .title("현재 위치")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPos,15));
 
         latitude = gpsInfo.getLatitude();
@@ -95,12 +99,13 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
             e.printStackTrace();
         }
 
-        //***********************************//
-        // 0~1 Index null error 잡기
-        // 현재 위치 ex) 신림동 가져오기
-        currentDong = addr.get(0);
-        //***********************************//
+
+        if(addr.get(0).getSubLocality() == null || addr.get(0).getThoroughfare()  == null)
+            currentDong = addr.get(1);
+        else
+            currentDong = addr.get(0);
         // 검색 문구 생성
+
 //        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
         searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + map.get(resultFoodName);
 
@@ -166,7 +171,10 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
                 convertedGeoPoint = GeoTrans.convert(1,0,geoPoint);
 
                 // marker 생성 완료
-                gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.y,convertedGeoPoint.x)).title("새롭게 추가된 놈"));
+                gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.y,convertedGeoPoint.x))
+                        .title(foodStoreName.get(i))
+                        .snippet(foodStoreAddr.get(i))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
             }
         }
     }
@@ -181,6 +189,9 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
             for(int i=0; i < jarray.length(); i++){
                 JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
 
+                //************************//
+                // <b>백반</b> 나오는 오류 해결하기
+                //************************//
                 foodStoreName.add(jObject.getString("title"));
                 foodStoreAddr.add(jObject.getString("address"));
                 foodStoreMapX.add(jObject.getString("mapx"));
