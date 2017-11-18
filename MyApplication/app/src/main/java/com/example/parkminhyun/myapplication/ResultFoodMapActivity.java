@@ -104,8 +104,8 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
             currentDong = addr.get(1);
         else
             currentDong = addr.get(0);
-        // 검색 문구 생성
 
+        // 검색 문구 생성
 //        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
         searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + map.get(resultFoodName);
 
