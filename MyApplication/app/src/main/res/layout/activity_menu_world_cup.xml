@@ -79,6 +79,23 @@
             android:layout_marginTop="10dp"
             android:visibility="invisible"
             android:background="@drawable/check"/>
+
+        <FrameLayout
+            android:visibility="invisible"
+            android:id="@+id/resultFoodPage"
+            android:layout_gravity="center"
+            android:layout_width="400dp"
+            android:layout_height="400dp">
+
+            <include
+                layout="@layout/food_world_cup_result"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </FrameLayout>
+
     </FrameLayout>
 
 </LinearLayout>

@@ -15,8 +15,6 @@ import nl.dionsegijn.konfetti.models.Size;
 
 public class ResultFoodMenuActivity extends AppCompatActivity {
 
-    private KonfettiView konfettiView;
-
     FoodInfomation foodInfomation;
     private TextView foodNameTextView;
     private ImageView resultFoodImageView;
@@ -28,7 +26,6 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
         setContentView(R.layout.food_world_cup_result);
 
         foodInfomation = FoodInfomation.getInstance();
-        konfettiView = (KonfettiView) findViewById(R.id.konfettiView);
         foodNameTextView = (TextView) findViewById(R.id.foodNameTextView);
         resultFoodImageView = (ImageView) findViewById(R.id.resultFoodImageView);
 
@@ -40,10 +37,10 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
         foodNameTextView.setText(foodInfomation.map.get(resultFoodName));
         resultFoodImageView.setAdjustViewBounds(true);
         resultFoodImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        // 0.1초 뒤 Handler 실행
-        Handler Handler = new Handler();
-        Handler.postDelayed(mMyRunnable4, 1000);
+//
+//        // 0.1초 뒤 Handler 실행
+//        Handler Handler = new Handler();
+//        Handler.postDelayed(mMyRunnable4, 1000);
     }
 
 
@@ -51,19 +48,19 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
     private Runnable mMyRunnable4 = new Runnable() {
         @Override
         public void run() {
-
-            // 폭죽 생성
-            konfettiView.bringToFront();
-            konfettiView.build()
-                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
-                    .setDirection(0.0, 359.0)
-                    .setSpeed(1f, 5f)
-                    .setFadeOutEnabled(true)
-                    .setTimeToLive(1000L)
-                    .addShapes(Shape.RECT, Shape.CIRCLE)
-                    .addSizes(new Size(12, 5f))
-                    .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
-                    .stream(300, 2000L);
+//
+//            // 폭죽 생성
+//            konfettiView.bringToFront();
+//            konfettiView.build()
+//                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+//                    .setDirection(0.0, 359.0)
+//                    .setSpeed(1f, 5f)
+//                    .setFadeOutEnabled(true)
+//                    .setTimeToLive(1000L)
+//                    .addShapes(Shape.RECT, Shape.CIRCLE)
+//                    .addSizes(new Size(12, 5f))
+//                    .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+//                    .stream(300, 2000L);
         }
     };
 

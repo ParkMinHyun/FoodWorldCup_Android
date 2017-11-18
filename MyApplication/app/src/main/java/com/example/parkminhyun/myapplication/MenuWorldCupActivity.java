@@ -16,7 +16,7 @@ import java.util.List;
 public class MenuWorldCupActivity extends AppCompatActivity {
 
     View view;
-    FrameLayout roots, menuLayout;
+    FrameLayout roots, menuLayout, resultFoodPage;
     ImageView topImageCheck, downImageCheck;
     ImageView topImage, downImage, resultFoodImageView;
 
@@ -44,6 +44,7 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     public void propertyInit() {
         roots = (FrameLayout) findViewById(R.id.root);
         view = findViewById(R.id.includeFrame);
+        resultFoodPage = (FrameLayout)findViewById(R.id.resultFoodPage);
         menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
         topImage = (ImageView) findViewById(R.id.topImage);
         downImage = (ImageView) findViewById(R.id.downImage);
@@ -190,10 +191,10 @@ public class MenuWorldCupActivity extends AppCompatActivity {
 
             // 결승전 진행할 때 결과창 Activity 띄우기
             if (final_flag) {
-
-                Intent intent = new Intent(getApplicationContext(),ResultFoodMenuActivity.class);
-                intent.putExtra("resultFood",foodTournerment_menuList.get(0));
-                startActivity(intent);
+                resultFoodPage.setVisibility(View.VISIBLE);
+//                Intent intent = new Intent(getApplicationContext(),ResultFoodMenuActivity.class);
+//                intent.putExtra("resultFood",foodTournerment_menuList.get(0));
+//                startActivity(intent);
 
             }
             else {
