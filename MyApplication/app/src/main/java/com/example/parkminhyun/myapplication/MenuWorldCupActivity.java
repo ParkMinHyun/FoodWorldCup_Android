@@ -1,6 +1,7 @@
 package com.example.parkminhyun.myapplication;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,8 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     View view;
     FrameLayout roots, menuLayout, resultFoodPage;
     ImageView topImageCheck, downImageCheck;
-    ImageView topImage, downImage, resultFoodImageView;
+    ImageView topImage, downImage, resultFoodImageView,findFoodStoreImageViewBtn;
+    TextView foodNameTextView;
 
     private List<String> foodTournerment_menuList = new ArrayList<String>();
     private String mDrawableName1, mDrawableName2;
@@ -27,13 +30,13 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     private int foodIndex = 0;
     private boolean quarterfinal_flag = false, semifinal_flag = false, final_flag = false;
 
+    FoodInfomation foodInfomation;
     private Animation translateUpAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_world_cup);
-
 
         propertyInit();
         menuListInit();
@@ -49,9 +52,13 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         topImage = (ImageView) findViewById(R.id.topImage);
         downImage = (ImageView) findViewById(R.id.downImage);
         resultFoodImageView = (ImageView) findViewById(R.id.resultFoodImageView);
+        findFoodStoreImageViewBtn = (ImageView)findViewById(R.id.findFoodStoreImageViewBtn);
+        foodNameTextView = (TextView)findViewById(R.id.foodNameTextView);
 
         topImageCheck = (ImageView) findViewById(R.id.topImageCheck);
         downImageCheck = (ImageView) findViewById(R.id.downImageCheck);
+
+        foodInfomation = FoodInfomation.getInstance();
 
         // 애니메이션객체로딩
         translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.translate_up);
@@ -59,21 +66,6 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         // 애니메이션객체에리스너설정
         SlidingPageAnimationListener animListener = new SlidingPageAnimationListener();
         translateUpAnim.setAnimationListener(animListener);
-    }
-
-    // 애니메이션 리스너 정의
-    private class SlidingPageAnimationListener implements Animation.AnimationListener {
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-        // 애니메이션이 끝날때 호출되는 메소드
-        public void onAnimationEnd(Animation animation) {
-        }
     }
 
     public void foodImageViewSetting() {
@@ -104,25 +96,6 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         downImage.setAlpha(1f);
     }
 
-    public void menuListInit() {
-        foodTournerment_menuList.add("baekban");
-        foodTournerment_menuList.add("bibimbab");
-        foodTournerment_menuList.add("bread");
-        foodTournerment_menuList.add("cake");
-        foodTournerment_menuList.add("chicken");
-        foodTournerment_menuList.add("dduckppoki");
-        foodTournerment_menuList.add("donggas");
-        foodTournerment_menuList.add("doughnut");
-        foodTournerment_menuList.add("gimbab");
-        foodTournerment_menuList.add("hamburger");
-        foodTournerment_menuList.add("ramen");
-        foodTournerment_menuList.add("sandwich");
-        foodTournerment_menuList.add("spagetti");
-        foodTournerment_menuList.add("steak");
-        foodTournerment_menuList.add("sushi");
-        foodTournerment_menuList.add("zazang");
-
-    }
 
     // Food 토너먼트 중 음식 이미지를 클릭했을 경우
     private void FoodImageClick_Result(String mode) {
@@ -164,6 +137,13 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         myHandler.postDelayed(mMyRunnable1, 1000);
     }
 
+    public void findFoodStoreImageClicked(View v){
+        Intent intent = new Intent(getApplicationContext(),ResultFoodMapActivity.class);
+        intent.putExtra("resultFood",foodInfomation.map.get(foodTournerment_menuList.get(0)));
+        startActivity(intent);
+
+    }
+
     // left Move 애니메이션 실행
     private Runnable mMyRunnable1 = new Runnable() {
         @Override
@@ -192,10 +172,12 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             // 결승전 진행할 때 결과창 Activity 띄우기
             if (final_flag) {
                 resultFoodPage.setVisibility(View.VISIBLE);
+                resultFoodImageView.setImageResource(getResources()
+                        .getIdentifier(foodTournerment_menuList.get(0).toString(), "drawable", getPackageName()));
+                foodNameTextView.setText(foodInfomation.map.get(foodTournerment_menuList.get(0)));
 //                Intent intent = new Intent(getApplicationContext(),ResultFoodMenuActivity.class);
 //                intent.putExtra("resultFood",foodTournerment_menuList.get(0));
 //                startActivity(intent);
-
             }
             else {
                 // 0.1초 뒤 Handler 실행
@@ -223,4 +205,38 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             topImage.setClickable(true);
         }
     };
+
+    public void menuListInit() {
+        foodTournerment_menuList.add("baekban");
+        foodTournerment_menuList.add("bibimbab");
+        foodTournerment_menuList.add("bread");
+        foodTournerment_menuList.add("cake");
+        foodTournerment_menuList.add("chicken");
+        foodTournerment_menuList.add("dduckppoki");
+        foodTournerment_menuList.add("donggas");
+        foodTournerment_menuList.add("doughnut");
+        foodTournerment_menuList.add("gimbab");
+        foodTournerment_menuList.add("hamburger");
+        foodTournerment_menuList.add("ramen");
+        foodTournerment_menuList.add("sandwich");
+        foodTournerment_menuList.add("spagetti");
+        foodTournerment_menuList.add("steak");
+        foodTournerment_menuList.add("sushi");
+        foodTournerment_menuList.add("zazang");
+    }
+
+    // 애니메이션 리스너 정의
+    private class SlidingPageAnimationListener implements Animation.AnimationListener {
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        // 애니메이션이 끝날때 호출되는 메소드
+        public void onAnimationEnd(Animation animation) {
+        }
+    }
 }

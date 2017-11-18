@@ -85,7 +85,7 @@
             android:id="@+id/resultFoodPage"
             android:layout_gravity="center"
             android:layout_width="400dp"
-            android:layout_height="400dp">
+            android:layout_height="420dp">
 
             <include
                 layout="@layout/food_world_cup_result"
