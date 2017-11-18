@@ -1,5 +1,6 @@
 package com.example.parkminhyun.myapplication;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -7,6 +8,9 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -39,6 +44,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     public HashMap<String, String> map;
 
     private GoogleMap gMap;
+    private EditText searchEditText;
 
     private double latitude;
     private double longitude;
@@ -53,6 +59,8 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     private List<String> foodStoreMapX;
     private List<String> foodStoreMapY;
 
+    private List<Marker> markers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +68,11 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 
         foodInfomation = FoodInfomation.getInstance();
         map = foodInfomation.getMap();
+        searchEditText = (EditText) findViewById(R.id.search);
 
-        resultFoodName = getIntent().getExtras().getString("resultFood");
+//        resultFoodName = getIntent().getExtras().getString("resultFood");
 
+        markers = new ArrayList<Marker>();
         foodStoreName = new ArrayList<>();
         foodStoreAddr = new ArrayList<>();
         foodStoreMapX = new ArrayList<String>();
@@ -86,7 +96,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         gMap.addMarker(new MarkerOptions().position(currentPos)
                 .title("현재 위치")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPos,15));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPos, 15));
 
         latitude = gpsInfo.getLatitude();
         longitude = gpsInfo.getLongitude();
@@ -100,14 +110,14 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         }
 
 
-        if(addr.get(0).getSubLocality() == null || addr.get(0).getThoroughfare()  == null)
+        if (addr.get(0).getSubLocality() == null || addr.get(0).getThoroughfare() == null)
             currentDong = addr.get(1);
         else
             currentDong = addr.get(0);
 
         // 검색 문구 생성
-//        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
-        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + map.get(resultFoodName);
+        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
+//        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + map.get(resultFoodName);
 
         // 네이버 검색 API 어싱크로 동작시키기
         ResultFoodMapActivity.JsoupAsyncTask jsoupAsyncTask = new ResultFoodMapActivity.JsoupAsyncTask();
@@ -126,7 +136,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         // 네이버 지도 검색 API 이용하는 함수
         @Override
         protected Void doInBackground(Void... params) {
-            Log.i("JSON","시작");
+            Log.i("JSON", "시작");
             String clientId = "kEZOwXlvRFPihiPU8fVJ";//애플리케이션 클라이언트 아이디값";
             String clientSecret = "wbyTPTRhuT";//애플리케이션 클라이언트 시크릿값";
             try {
@@ -165,34 +175,32 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         @Override
         protected void onPostExecute(Void result) {
             // Marker 생성
-            for(int i=0; i<foodStoreName.size(); i++){
+            for (int i = 0; i < foodStoreName.size(); i++) {
 
-                GeoPoint geoPoint = new GeoPoint( Double.parseDouble(foodStoreMapX.get(i)),Double.parseDouble(foodStoreMapY.get(i)));
-                convertedGeoPoint = GeoTrans.convert(1,0,geoPoint);
+                GeoPoint geoPoint = new GeoPoint(Double.parseDouble(foodStoreMapX.get(i)), Double.parseDouble(foodStoreMapY.get(i)));
+                convertedGeoPoint = GeoTrans.convert(1, 0, geoPoint);
 
                 // marker 생성 완료
-                gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.y,convertedGeoPoint.x))
+                markers.add(gMap.addMarker(new MarkerOptions().position(new LatLng(convertedGeoPoint.y, convertedGeoPoint.x))
                         .title(foodStoreName.get(i))
                         .snippet(foodStoreAddr.get(i))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))));
             }
         }
     }
 
     // JSON Data 받기
-    private void ReceiveFoodInfoUsingJSON(String response){
+    private void ReceiveFoodInfoUsingJSON(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response.toString());   // JSONObject 생성
             String a = jsonObject.getString("items");
 
             JSONArray jarray = new JSONArray(a);   // JSONArray 생성
-            for(int i=0; i < jarray.length(); i++){
+            for (int i = 0; i < jarray.length(); i++) {
                 JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
 
-                //************************//
-                // <b>백반</b> 나오는 오류 해결하기
-                //************************//
-                foodStoreName.add(jObject.getString("title"));
+                String reviseFoodstoreName = jObject.getString("title").replace("<b>"," ");
+                foodStoreName.add(reviseFoodstoreName.replace("</b>",""));
                 foodStoreAddr.add(jObject.getString("address"));
                 foodStoreMapX.add(jObject.getString("mapx"));
                 foodStoreMapY.add(jObject.getString("mapy"));
@@ -202,6 +210,30 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void findAnotherFoodStoreImageClicked(View v) {
+
+        // 키보드 내리기
+        hideSoftKeyboard(v);
+
+        // 검색하기
+        if (searchEditText.getText().length() != 0)
+            searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + searchEditText.getText();
+
+        // 마커 전부 삭제
+        for (Marker m : markers)
+            m.remove();
+
+        // 네이버 검색 API 어싱크로 동작시키기
+        ResultFoodMapActivity.JsoupAsyncTask jsoupAsyncTask = new ResultFoodMapActivity.JsoupAsyncTask();
+        jsoupAsyncTask.execute();
+
+    }
+
+    protected void hideSoftKeyboard(View view) {
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }

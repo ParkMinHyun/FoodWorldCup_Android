@@ -3,6 +3,7 @@ package com.example.parkminhyun.myapplication;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,9 +41,9 @@ public class ResultFoodMenuActivity extends AppCompatActivity {
         resultFoodImageView.setAdjustViewBounds(true);
         resultFoodImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
-//        // 0.1초 뒤 Handler 실행
-//        Handler Handler = new Handler();
-//        Handler.postDelayed(mMyRunnable4, 1000);
+        // 0.1초 뒤 Handler 실행
+        Handler Handler = new Handler();
+        Handler.postDelayed(mMyRunnable4, 1000);
     }
 
 

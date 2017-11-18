@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MenuWorldCupActivity">
+            android:name=".ResultFoodMapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +42,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ResultFoodMapActivity" />
+        <!--<activity android:name=".ResultFoodMapActivity" />-->
     </application>
 
 </manifest>
