@@ -20,10 +20,10 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     View view;
     FrameLayout roots, menuLayout, resultFoodPage;
     ImageView topImageCheck, downImageCheck;
-    ImageView topImage, downImage, resultFoodImageView,findFoodStoreImageViewBtn;
+    ImageView topImage, downImage, resultFoodImageView, findFoodStoreImageViewBtn;
     TextView foodNameTextView;
 
-    private List<String> foodTournerment_menuList = new ArrayList<String>();
+    private List<String> foodTournerment_menuList = new ArrayList<>();
     private String mDrawableName1, mDrawableName2;
     private int resID1, resID2;
 
@@ -47,13 +47,13 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     public void propertyInit() {
         roots = (FrameLayout) findViewById(R.id.root);
         view = findViewById(R.id.includeFrame);
-        resultFoodPage = (FrameLayout)findViewById(R.id.resultFoodPage);
+        resultFoodPage = (FrameLayout) findViewById(R.id.resultFoodPage);
         menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
         topImage = (ImageView) findViewById(R.id.topImage);
         downImage = (ImageView) findViewById(R.id.downImage);
         resultFoodImageView = (ImageView) findViewById(R.id.resultFoodImageView);
-        findFoodStoreImageViewBtn = (ImageView)findViewById(R.id.findFoodStoreImageViewBtn);
-        foodNameTextView = (TextView)findViewById(R.id.foodNameTextView);
+        findFoodStoreImageViewBtn = (ImageView) findViewById(R.id.findFoodStoreImageViewBtn);
+        foodNameTextView = (TextView) findViewById(R.id.foodNameTextView);
 
         topImageCheck = (ImageView) findViewById(R.id.topImageCheck);
         downImageCheck = (ImageView) findViewById(R.id.downImageCheck);
@@ -137,11 +137,10 @@ public class MenuWorldCupActivity extends AppCompatActivity {
         myHandler.postDelayed(mMyRunnable1, 1000);
     }
 
-    public void findFoodStoreImageClicked(View v){
-        Intent intent = new Intent(getApplicationContext(),ResultFoodMapActivity.class);
-        intent.putExtra("resultFood",foodTournerment_menuList.get(0));
+    public void findFoodStoreImageClicked(View v) {
+        Intent intent = new Intent(getApplicationContext(), ResultFoodMapActivity.class);
+        intent.putExtra("resultFood", foodTournerment_menuList.get(0));
         startActivity(intent);
-
     }
 
     // left Move 애니메이션 실행
@@ -156,10 +155,9 @@ public class MenuWorldCupActivity extends AppCompatActivity {
             topImageCheck.setVisibility(view.INVISIBLE);
             downImageCheck.setVisibility(view.INVISIBLE);
 
-                // 0.1초 뒤 Handler 실행
-                Handler Handler = new Handler();
-                Handler.postDelayed(mMyRunnable2, 100);
-
+            // 0.1초 뒤 Handler 실행
+            Handler Handler = new Handler();
+            Handler.postDelayed(mMyRunnable2, 100);
         }
     };
 
@@ -175,11 +173,7 @@ public class MenuWorldCupActivity extends AppCompatActivity {
                 resultFoodImageView.setImageResource(getResources()
                         .getIdentifier(foodTournerment_menuList.get(0).toString(), "drawable", getPackageName()));
                 foodNameTextView.setText(foodInfomation.map.get(foodTournerment_menuList.get(0)));
-//                Intent intent = new Intent(getApplicationContext(),ResultFoodMenuActivity.class);
-//                intent.putExtra("resultFood",foodTournerment_menuList.get(0));
-//                startActivity(intent);
-            }
-            else {
+            } else {
                 // 0.1초 뒤 Handler 실행
                 Handler Handler = new Handler();
                 Handler.postDelayed(mMyRunnable3, 100);

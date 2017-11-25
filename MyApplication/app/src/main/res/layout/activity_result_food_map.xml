@@ -29,7 +29,6 @@
                 android:hint="ex) 짜장면"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
-
                 <requestFocus />
             </EditText>
 
