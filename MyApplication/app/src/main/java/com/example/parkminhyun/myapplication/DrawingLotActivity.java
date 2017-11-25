@@ -64,4 +64,74 @@ public class DrawingLotActivity extends AppCompatActivity {
 
     }
 
+
+    private class JsoupAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        // 네이버 지도 검색 API 이용하는 함수
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.i("JSON", "시작");
+            String clientId = "kEZOwXlvRFPihiPU8fVJ";//애플리케이션 클라이언트 아이디값";
+            String clientSecret = "wbyTPTRhuT";//애플리케이션 클라이언트 시크릿값";
+            try {
+                String text = URLEncoder.encode(inputText.getText().toString(), "UTF-8");
+                String apiURL = "https://openapi.naver.com/v1/search/image.json?query=" + text + "&display=2&start=1&sort=sim"; // json 결과
+                //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+                URL url = new URL(apiURL);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("X-Naver-Client-Id", clientId);
+                con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+                int responseCode = con.getResponseCode();
+                BufferedReader br;
+                if (responseCode == 200) { // 정상 호출
+                    br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                } else {  // 에러 발생
+                    br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                }
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = br.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                br.close();
+                ReceiveFoodInfoUsingJSON(response.toString());
+
+                System.out.println(response);
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
+    }
+
+    // JSON Data 받기
+    private void ReceiveFoodInfoUsingJSON(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response.toString());   // JSONObject 생성
+            String a = jsonObject.getString("items");
+
+            JSONArray jarray = new JSONArray(a);   // JSONArray 생성
+            for (int i = 0; i < 1; i++) {
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+                foodThumbnail = jObject.getString("thumbnail");
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
