@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,11 +60,10 @@ public class DrawingLotActivity extends AppCompatActivity {
             case 5: foodImage6.setVisibility(View.VISIBLE); break;
             default: break;
         }
-
         // 네이버 검색 API 어싱크로 동작시키기
         DrawingLotActivity.JsoupAsyncTask jsoupAsyncTask = new DrawingLotActivity.JsoupAsyncTask();
         jsoupAsyncTask.execute();
-
+        foodNum++;
     }
 
 
@@ -113,7 +115,9 @@ public class DrawingLotActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-
+            Picasso.with(getApplicationContext())
+                    .load(foodThumbnail)
+                    .into((ImageView)findViewById(getResources().getIdentifier("image"+foodNum, "id", getPackageName())));
         }
     }
 

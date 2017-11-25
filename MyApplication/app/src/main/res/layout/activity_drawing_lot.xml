@@ -81,8 +81,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/success"
                     android:gravity="center"
+                    android:scaleType="fitCenter"
                     android:visibility="invisible" />
 
                 <ImageView
@@ -93,8 +93,8 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/success"
                     android:gravity="center"
+                    android:scaleType="fitCenter"
                     android:visibility="invisible" />
             </TableRow>
 
@@ -108,8 +108,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/success"
                     android:gravity="center"
+                    android:scaleType="fitCenter"
                     android:visibility="invisible" />
 
                 <ImageView
@@ -120,8 +120,8 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/success"
                     android:gravity="center"
+                    android:scaleType="fitCenter"
                     android:visibility="invisible" />
             </TableRow>
 
@@ -135,8 +135,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/success"
                     android:gravity="center"
+                    android:scaleType="fitCenter"
                     android:visibility="invisible" />
 
                 <ImageView
@@ -147,8 +147,8 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/success"
                     android:gravity="center"
+                    android:scaleType="fitCenter"
                     android:visibility="invisible" />
             </TableRow>
 

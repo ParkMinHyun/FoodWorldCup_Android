@@ -30,4 +30,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'nl.dionsegijn:konfetti:1.1.0'
     compile 'com.google.android.gms:play-services-maps:10.0.0'
+    compile files('libs/picasso-2.5.2.jar')
+
 }
