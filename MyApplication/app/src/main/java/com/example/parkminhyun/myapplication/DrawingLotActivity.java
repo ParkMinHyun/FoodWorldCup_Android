@@ -129,7 +129,6 @@ public class DrawingLotActivity extends AppCompatActivity {
                 foodThumbnail = jObject.getString("thumbnail");
             }
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
