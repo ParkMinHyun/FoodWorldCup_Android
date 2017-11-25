@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,6 +20,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 public class DrawingLotActivity extends AppCompatActivity {
@@ -26,6 +30,7 @@ public class DrawingLotActivity extends AppCompatActivity {
     ImageView foodImage1,foodImage2,foodImage3,foodImage4,foodImage5,foodImage6 ;
     EditText inputText;
 
+    List<String> addedFoodName = new ArrayList<>();
     String foodThumbnail;
     int foodNum = 0;
 
@@ -58,12 +63,20 @@ public class DrawingLotActivity extends AppCompatActivity {
             case 3: foodImage4.setVisibility(View.VISIBLE); break;
             case 4: foodImage5.setVisibility(View.VISIBLE); break;
             case 5: foodImage6.setVisibility(View.VISIBLE); break;
-            default: break;
+            default:
+                Toast.makeText(getApplicationContext(),"더 이상 추가할 수 없습니다",Toast.LENGTH_SHORT).show(); return;
         }
         // 네이버 검색 API 어싱크로 동작시키기
         DrawingLotActivity.JsoupAsyncTask jsoupAsyncTask = new DrawingLotActivity.JsoupAsyncTask();
         jsoupAsyncTask.execute();
         foodNum++;
+    }
+
+    public void startDrawingLot(View view) {
+        Random random = new Random();
+
+        int randomNum = random.nextInt(foodNum);
+        Toast.makeText(getApplicationContext(),addedFoodName.get(randomNum),Toast.LENGTH_SHORT).show();
     }
 
 
@@ -118,6 +131,11 @@ public class DrawingLotActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext())
                     .load(foodThumbnail)
                     .into((ImageView)findViewById(getResources().getIdentifier("image"+foodNum, "id", getPackageName())));
+
+
+            // 음식 이름 추가
+            addedFoodName.add(inputText.getText().toString());
+            inputText.setText("");
         }
     }
 

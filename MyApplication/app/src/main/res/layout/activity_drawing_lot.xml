@@ -11,7 +11,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:layout_weight="1">
 
         <TextView
@@ -58,9 +58,10 @@
         android:background="#bec0c4" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
         android:layout_below="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -72,7 +73,6 @@
             android:stretchColumns="0,1">
 
             <TableRow>
-
                 <ImageView
                     android:id="@+id/image1"
                     android:layout_width="50dp"
@@ -154,4 +154,12 @@
 
         </TableLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/startDrawingLotBtn"
+        android:onClick="startDrawingLot"
+        android:layout_alignParentBottom="true"
+        android:text="제비뽑기 시작"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
 </RelativeLayout>
