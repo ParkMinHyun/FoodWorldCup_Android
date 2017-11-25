@@ -45,6 +45,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
     private GoogleMap gMap;
     private EditText searchEditText;
 
+    private int previousActivity;
     private double latitude;
     private double longitude;
     LatLng currentPos;
@@ -72,6 +73,7 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
         searchEditText = (EditText) findViewById(R.id.search);
 
         resultFoodName = getIntent().getExtras().getString("resultFood");
+        previousActivity = getIntent().getExtras().getInt("previousActivity");
 
         markers = new ArrayList<Marker>();
         foodStoreName = new ArrayList<>();
@@ -118,13 +120,14 @@ public class ResultFoodMapActivity extends FragmentActivity implements OnMapRead
 //        searchText = currentDong.getThoroughfare() + ' ' + "백반";
 //        cityName = currentDong.getThoroughfare();
 
-        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
+//        searchText = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare() + ' ' + "백반";
         if(currentDong.getSubLocality() == null)
             cityName = currentDong.getThoroughfare();
         else
             cityName = currentDong.getSubLocality() + ' ' + currentDong.getThoroughfare();
 
-        searchText = cityName + ' ' + map.get(resultFoodName);
+
+        searchText = (previousActivity==0) ? cityName + ' ' + map.get(resultFoodName) : cityName + ' ' + resultFoodName;
 
         // 네이버 검색 API 어싱크로 동작시키기
         ResultFoodMapActivity.JsoupAsyncTask jsoupAsyncTask = new ResultFoodMapActivity.JsoupAsyncTask();

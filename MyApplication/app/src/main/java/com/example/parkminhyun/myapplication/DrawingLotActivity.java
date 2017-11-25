@@ -1,5 +1,6 @@
 package com.example.parkminhyun.myapplication;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -76,7 +77,10 @@ public class DrawingLotActivity extends AppCompatActivity {
         Random random = new Random();
 
         int randomNum = random.nextInt(foodNum);
-        Toast.makeText(getApplicationContext(),addedFoodName.get(randomNum),Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), ResultFoodMapActivity.class);
+        intent.putExtra("resultFood", addedFoodName.get(randomNum));
+        intent.putExtra("previousActivity", 1);
+        startActivity(intent);
     }
 
 

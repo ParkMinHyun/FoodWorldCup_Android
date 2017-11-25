@@ -140,6 +140,7 @@ public class MenuWorldCupActivity extends AppCompatActivity {
     public void findFoodStoreImageClicked(View v) {
         Intent intent = new Intent(getApplicationContext(), ResultFoodMapActivity.class);
         intent.putExtra("resultFood", foodTournerment_menuList.get(0));
+        intent.putExtra("previousActivity", 0);
         startActivity(intent);
     }
 
